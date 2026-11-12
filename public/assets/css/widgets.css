@@ -1,0 +1,913 @@
+/* ---------- Widget 外壳 ---------- */
+.widget {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--w-bg, var(--card-bg));
+  border: 1px solid var(--card-border);
+  border-radius: var(--w-radius, 16px);
+  padding: var(--w-padding, 16px);
+  color: var(--w-color, var(--text));
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(var(--w-blur, 0px)) saturate(135%);
+  -webkit-backdrop-filter: blur(var(--w-blur, 0px)) saturate(135%);
+  font-size: var(--w-font-size, 0.9rem);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.widget-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.widget-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex: 0 0 auto;
+}
+.widget-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.widget-head .spacer {
+  flex: 1;
+}
+.widget-tools {
+  display: flex;
+  gap: 2px;
+}
+
+/* ---------- 时钟 ---------- */
+.clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  gap: 2px;
+}
+.clock-time {
+  font-size: clamp(1.6rem, 3.2vw, 2.7rem);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.clock-time .seconds {
+  font-size: 0.55em;
+  color: var(--text-dim);
+  margin-left: 0.15em;
+}
+.clock-date {
+  color: var(--text-dim);
+  font-size: 0.8em;
+  margin-top: 2px;
+}
+.clock-analog {
+  width: min(78%, 150px);
+  aspect-ratio: 1;
+}
+.clock-analog .face {
+  fill: color-mix(in srgb, var(--text) 4%, transparent);
+  stroke: var(--line);
+}
+.clock-analog .tick {
+  stroke: var(--text-dim);
+}
+.clock-analog .hand {
+  stroke: var(--text);
+  stroke-linecap: round;
+}
+.clock-analog .hand-second {
+  stroke: var(--primary);
+}
+
+/* ---------- 日历通用 ---------- */
+.cal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.cal-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  flex: 0 0 auto;
+}
+.cal-title {
+  font-size: 0.98rem;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 60px;
+  flex: 1;
+}
+.cal-nav {
+  display: flex;
+  gap: 1px;
+}
+.cal-nav .icon-btn {
+  width: 26px;
+  height: 26px;
+}
+.cal-nav .icon-btn svg {
+  width: 14px;
+  height: 14px;
+}
+.cal-views {
+  margin-left: auto;
+}
+.cal-views button {
+  padding: 4px 9px;
+}
+.cal-body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.cal-time {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.cal-top {
+  flex: 0 0 auto;
+}
+.cal-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 20px;
+  opacity: 0.8;
+}
+
+/* 全天事件 */
+.allday-row {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  min-height: 26px;
+  flex: 0 0 auto;
+}
+.allday-gutter {
+  width: 50px;
+  flex: 0 0 50px;
+  font-size: 0.64rem;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+}
+.allday-cells {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+.allday-cell {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 3px;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.allday-chip {
+  font-size: 0.66rem;
+  line-height: 1.3;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ev-color) 28%, var(--card-bg));
+  border-left: 2px solid var(--ev-color);
+  color: var(--text);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.allday-chip.done {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* 周头 */
+.week-head {
+  display: flex;
+  padding-left: 50px;
+  border-bottom: 1px solid var(--line);
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--card-bg) 92%, transparent);
+  backdrop-filter: blur(6px);
+  z-index: 6;
+}
+.week-head-cell {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  padding: 4px 2px 6px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  border-left: 1px solid transparent;
+}
+.week-head-cell .wd {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.62rem;
+  opacity: 0.85;
+}
+.week-head-cell .dn {
+  display: inline-block;
+  margin-top: 1px;
+  font-size: 0.86rem;
+  color: var(--text);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+.week-head-cell.today .dn {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font-weight: 600;
+}
+.week-head-cell.today .wd {
+  color: var(--primary);
+}
+
+/* 时间轴 */
+.time-grid {
+  display: flex;
+  position: relative;
+}
+.time-gutter {
+  width: 50px;
+  flex: 0 0 50px;
+  position: relative;
+}
+.hour-label {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-size: 0.64rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.day-cols {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+.day-col {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  border-left: 1px solid var(--line);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--hour-height, 52px) - 1px),
+    var(--line) calc(var(--hour-height, 52px) - 1px),
+    var(--line) var(--hour-height, 52px)
+  );
+}
+.day-col.weekend {
+  background-color: color-mix(in srgb, var(--text) 2%, transparent);
+}
+.day-col.today {
+  background-color: color-mix(in srgb, var(--primary) 4%, transparent);
+}
+.day-col.drop-target {
+  background-color: color-mix(in srgb, var(--primary) 9%, transparent);
+}
+.half-hour-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--text-dim) 13%, transparent);
+  pointer-events: none;
+}
+
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px solid #ef4444;
+  z-index: 7;
+  pointer-events: none;
+}
+.now-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #ef4444 25%, transparent);
+}
+
+/* 事件块 */
+.ev {
+  position: absolute;
+  z-index: 3;
+  border-radius: 7px;
+  padding: 3px 6px 3px 7px;
+  background: color-mix(in srgb, var(--ev-color, var(--primary)) 24%, var(--card-bg));
+  border-left: 3px solid var(--ev-color, var(--primary));
+  color: var(--text);
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.15s, filter 0.15s;
+  min-height: 19px;
+}
+.ev:hover {
+  filter: brightness(1.07);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+  z-index: 4;
+}
+.ev.done {
+  opacity: 0.5;
+}
+.ev.done .ev-title {
+  text-decoration: line-through;
+}
+.ev.dragging {
+  cursor: grabbing;
+  opacity: 0.85;
+  z-index: 10;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+}
+.ev.selected {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.ev-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  overflow: hidden;
+}
+.ev-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ev-title-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ev-time {
+  font-size: 0.63rem;
+  color: color-mix(in srgb, var(--text) 72%, transparent);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ev-repeat,
+.ev-done-mark {
+  width: 11px;
+  height: 11px;
+  flex: 0 0 auto;
+  opacity: 0.8;
+}
+.ev-check {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--text) 45%, transparent);
+  background: color-mix(in srgb, var(--card-bg) 80%, transparent);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  z-index: 2;
+}
+.ev-check svg {
+  width: 9px;
+  height: 9px;
+  color: #fff;
+}
+.ev:hover .ev-check,
+.ev.done .ev-check {
+  opacity: 1;
+}
+.ev-check.checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.ev-handle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  cursor: ns-resize;
+  z-index: 2;
+  touch-action: none;
+}
+.ev-handle.top {
+  top: 0;
+}
+.ev-handle.bottom {
+  bottom: 0;
+}
+.ev-time.compact {
+  display: none;
+}
+.ev.small .ev-time {
+  display: none;
+}
+.create-ghost {
+  position: absolute;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--primary) 22%, transparent);
+  border: 1px dashed var(--primary);
+  z-index: 3;
+  pointer-events: none;
+  font-size: 0.66rem;
+  padding: 2px 6px;
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* 月视图 */
+.month {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.month-head {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+.month-head span {
+  text-align: center;
+  font-size: 0.66rem;
+  color: var(--text-dim);
+  padding: 3px 0 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.month-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(48px, 1fr));
+  overflow: auto;
+}
+.month-cell {
+  min-width: 0;
+  min-height: 48px;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  padding: 3px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  overflow: hidden;
+}
+.month-cell:nth-child(7n + 1) {
+  border-left: 0;
+}
+.month-cell:hover {
+  background: var(--hover);
+}
+.month-cell.outside {
+  opacity: 0.45;
+}
+.month-date {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  align-self: flex-start;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  padding: 0 3px;
+}
+.month-cell.today .month-date {
+  background: var(--primary);
+  color: var(--primary-contrast);
+  font-weight: 600;
+}
+.month-chip {
+  font-size: 0.64rem;
+  line-height: 1.35;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ev-color) 22%, var(--card-bg));
+  border-left: 2px solid var(--ev-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+.month-chip.done {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+.month-more {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  padding-left: 4px;
+  white-space: nowrap;
+}
+
+/* 手机周视图折叠列表 */
+.mobile-week {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px;
+}
+.mobile-day {
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.mobile-day-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: var(--hover);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.mobile-day-head.today {
+  color: var(--primary);
+  font-weight: 600;
+}
+.mobile-day-head .count {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+.mobile-day-body {
+  display: flex;
+  flex-direction: column;
+  padding: 3px 0;
+}
+.mobile-day-body[hidden] {
+  display: none;
+}
+.mobile-ev {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-left: 3px solid var(--ev-color);
+  font-size: 0.78rem;
+  cursor: pointer;
+  background: transparent;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  text-align: left;
+  width: 100%;
+  color: var(--text);
+}
+.mobile-ev:hover {
+  background: var(--hover);
+}
+.mobile-ev.done {
+  opacity: 0.5;
+}
+.mobile-ev .t {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  min-width: 48px;
+  font-variant-numeric: tabular-nums;
+}
+.mobile-day-empty {
+  padding: 8px 10px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+/* ---------- 日程列表 ---------- */
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  height: 100%;
+  min-height: 0;
+}
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 7px;
+  border-radius: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  width: 100%;
+  font-size: 0.78rem;
+  transition: background 0.15s;
+}
+.list-row:hover {
+  background: var(--hover);
+}
+.list-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--ev-color);
+}
+.list-main {
+  flex: 1;
+  min-width: 0;
+}
+.list-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.list-row.done .list-title {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+.list-meta {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.list-meta .repeat {
+  width: 10px;
+  height: 10px;
+}
+
+/* ---------- 待办 ---------- */
+.todo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  min-height: 0;
+}
+.todo-add {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.todo-add input {
+  min-height: 32px;
+  padding: 5px 9px;
+  font-size: 0.8rem;
+}
+.todo-add .btn {
+  padding: 5px 9px;
+}
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+.todo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 5px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+.todo-row:hover {
+  background: var(--hover);
+}
+.todo-row label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+.todo-row .text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todo-row.done .text {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.todo-row .icon-btn {
+  width: 22px;
+  height: 22px;
+  opacity: 0;
+}
+.todo-row:hover .icon-btn {
+  opacity: 1;
+}
+
+/* ---------- 便签 ---------- */
+.note {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  background: transparent;
+  resize: none;
+  padding: 0;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--text);
+  outline: none;
+}
+.note::placeholder {
+  color: var(--text-dim);
+}
+
+/* ---------- 倒计时 ---------- */
+.countdown {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+}
+.countdown-title {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.countdown-days {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.countdown-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+.countdown-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  font-size: 0.78rem;
+}
+.countdown-form input {
+  min-height: 30px;
+  padding: 4px 8px;
+  font-size: 0.78rem;
+}
+
+/* ---------- 进度条 ---------- */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  justify-content: center;
+}
+.progress-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.progress-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  flex: 1;
+}
+.progress-value {
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.progress-track {
+  height: 7px;
+  border-radius: 999px;
+  background: var(--hover-strong);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 55%, #a78bfa));
+  transition: width 0.8s ease;
+}
+.progress-sub {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---------- 图片 ---------- */
+.image-widget {
+  height: 100%;
+  min-height: 0;
+  border-radius: calc(var(--w-radius, 16px) - var(--w-padding, 16px) / 2);
+  overflow: hidden;
+  background: var(--hover);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.image-widget img {
+  width: 100%;
+  height: 100%;
+}
+.image-widget .empty {
+  padding: 8px;
+  gap: 4px;
+}
+.image-widget .empty svg {
+  width: 20px;
+  height: 20px;
+}
+.image-widget .img-actions {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.image-widget:hover .img-actions {
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .cal-head {
+    gap: 4px;
+  }
+  .cal-title {
+    font-size: 0.9rem;
+  }
+  .allday-gutter,
+  .time-gutter {
+    width: 38px;
+    flex-basis: 38px;
+  }
+  .week-head {
+    padding-left: 38px;
+  }
+  .hour-label {
+    font-size: 0.58rem;
+  }
+  .ev-title {
+    font-size: 0.68rem;
+  }
+}
