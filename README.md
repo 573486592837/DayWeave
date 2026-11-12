@@ -51,13 +51,16 @@ npm run dev
 
 ## 内网访问
 
-1. 查询笔记本内网 IP：
+1. 启动服务，终端会按网卡分类打印地址，例如：
 
-   ```powershell
-   ipconfig
+   ```text
+   内网访问（手机/平板需与电脑处于同一网络）:
+     http://192.168.1.23:8080  [WLAN]
+   虚拟网卡（仅本机可达，手机请勿使用）:
+     http://192.168.56.1:8080  [VirtualBox Host-Only Network]
    ```
 
-   找到当前 WiFi / 以太网适配器的 IPv4 地址，例如 `192.168.1.23`。
+   手机使用 `[WLAN]`（或实际连接网线的 `[以太网]`）那一行的地址。`VMware`、`VirtualBox`、`Hyper-V`、`WSL`、`vEthernet` 等虚拟网卡的地址在笔记本本机可以打开，但手机无法访问。
 
 2. 手机连接同一 WiFi，浏览器打开：
 
@@ -65,13 +68,13 @@ npm run dev
    http://192.168.1.23:8080
    ```
 
-3. 如果打不开，先检查 Windows 防火墙是否放行 8080 端口（需管理员 PowerShell）：
+3. 先用手机访问 `http://<笔记本IP>:8080/healthz`：能返回 `ok` 说明网络与防火墙已通，打不开则是网络层问题；再检查 Windows 防火墙是否放行 8080 端口（需管理员 PowerShell）：
 
    ```powershell
-   New-NetFirewallRule -DisplayName "DayWeave 8080" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow
+   New-NetFirewallRule -DisplayName "DayWeave 8080" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow -Profile Private,Public
    ```
 
-4. 建议在路由器中为笔记本绑定静态 DHCP 地址，避免内网 IP 变化导致收藏的地址失效。
+4. 若同一 WiFi 下仍无法访问，检查路由器是否开启了「AP 隔离 / 客户端隔离」，并确认手机没有使用蜂窝数据或其他网段；建议在路由器中为笔记本绑定静态 DHCP 地址，避免内网 IP 变化导致收藏的地址失效。
 
 ## 环境变量
 
@@ -337,7 +340,7 @@ DayWeave/
 
 **端口被占用**：设置 `PORT` 环境变量换端口，例如 `$env:PORT="9000"`。
 
-**手机打不开**：确认同一 WiFi、IP 正确、防火墙放行端口、笔记本未休眠；服务是否仍在终端运行。
+**手机打不开 / 提示拒绝访问**：先确认手机与笔记本在同一 WiFi，并使用终端打印的 `[WLAN]` 或 `[以太网]` 地址，不要使用 `[VMware]` 等虚拟网卡地址；再让手机访问 `http://<笔记本IP>:8080/healthz`。若仍失败，检查防火墙放行、路由器 AP 隔离、笔记本休眠和手机是否走蜂窝数据。
 
 **提醒不准时**：保持页面在前台；浏览器会节流后台标签页的定时器，页面关闭后不会提醒。
 

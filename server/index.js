@@ -95,14 +95,20 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'internal_error' });
 });
 
+const VIRTUAL_IFACE = /(vmware|virtualbox|vbox|hyper-v|vethernet|wsl|docker|loopback|bluetooth|tap|tun|teredo|isatap|tailscale|zerotier)/i;
+
 function lanAddresses() {
-  const out = [];
-  for (const list of Object.values(os.networkInterfaces())) {
+  const physical = [];
+  const virtual = [];
+  for (const [name, list] of Object.entries(os.networkInterfaces())) {
     for (const net of list || []) {
-      if (net.family === 'IPv4' && !net.internal) out.push(net.address);
+      if (net.family !== 'IPv4' || net.internal) continue;
+      if (net.address.startsWith('169.254.')) continue;
+      const entry = { name, address: net.address };
+      (VIRTUAL_IFACE.test(name) ? virtual : physical).push(entry);
     }
   }
-  return out;
+  return { physical, virtual };
 }
 
 async function main() {
@@ -122,7 +128,21 @@ async function main() {
     log.info(`DayWeave 已启动（${scheme}），rev=${state.rev}，SSE 客户端=${sseClientCount()}`);
     console.log('');
     console.log(`  本机访问:   ${scheme}://localhost:${PORT}`);
-    for (const ip of lanAddresses()) console.log(`  内网访问:   ${scheme}://${ip}:${PORT}`);
+    const { physical, virtual } = lanAddresses();
+    if (physical.length) {
+      console.log('  内网访问（手机/平板需与电脑处于同一网络）:');
+      for (const { name, address } of physical) {
+        console.log(`    ${scheme}://${address}:${PORT}  [${name}]`);
+      }
+    } else {
+      console.log('  未检测到可用的内网 IPv4 地址，请确认已连接 Wi-Fi 或网线');
+    }
+    if (virtual.length) {
+      console.log('  虚拟网卡（仅本机可达，手机请勿使用）:');
+      for (const { name, address } of virtual) {
+        console.log(`    ${scheme}://${address}:${PORT}  [${name}]`);
+      }
+    }
     console.log('');
   });
   server.on('error', (err) => {

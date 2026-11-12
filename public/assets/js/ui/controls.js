@@ -35,23 +35,29 @@ export function iconButton(icon, title, onClick, { danger = false, disabled = fa
 
 export function segmented(options, value, onChange) {
   const wrap = h('div', { class: 'seg', role: 'group' });
-  for (const opt of options) {
-    wrap.append(
-      h(
-        'button',
-        {
-          type: 'button',
-          class: opt.value === value ? 'active' : '',
-          'aria-pressed': String(opt.value === value),
-          onclick: () => {
-            if (opt.value === value) return;
-            onChange(opt.value);
-          },
+  let current = value;
+  const buttons = options.map((opt) =>
+    h(
+      'button',
+      {
+        type: 'button',
+        class: opt.value === current ? 'active' : '',
+        'aria-pressed': String(opt.value === current),
+        onclick: () => {
+          if (opt.value === current) return;
+          current = opt.value;
+          buttons.forEach((button, index) => {
+            const active = options[index].value === current;
+            button.classList.toggle('active', active);
+            button.setAttribute('aria-pressed', String(active));
+          });
+          onChange(current);
         },
-        opt.label,
-      ),
-    );
-  }
+      },
+      opt.label,
+    ),
+  );
+  wrap.append(...buttons);
   return wrap;
 }
 
