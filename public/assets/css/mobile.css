@@ -1,0 +1,147 @@
+/* ---------- 移动端 / 平板适配 ---------- */
+.mobile-tabs {
+  display: none;
+}
+
+body:not(.display-mode) .display-exit {
+  display: none !important;
+}
+.display-mode .display-exit {
+  display: inline-flex;
+}
+
+@media (min-width: 1024px) {
+  .mobile-tabs {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .mobile-tabs {
+    display: flex;
+    gap: 5px;
+    padding: 8px 12px 7px;
+    background: var(--toolbar-bg);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 18;
+    flex: 0 0 auto;
+  }
+  .mobile-tabs button {
+    flex: 1;
+    border: 1px solid var(--line);
+    background: var(--input-bg);
+    color: var(--text-dim);
+    border-radius: 9px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    transition: background 0.15s, color 0.15s;
+  }
+  .mobile-tabs button.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary-contrast);
+    font-weight: 600;
+  }
+
+  .canvas > .widget {
+    width: 100%;
+    min-height: var(--w-min-h, 150px);
+  }
+  .canvas > .widget[data-type='calendar'] {
+    min-height: 300px;
+  }
+  .canvas > .widget[data-type='clock'] {
+    min-height: 150px;
+  }
+  .canvas > .widget[data-type='note'],
+  .canvas > .widget[data-type='todo'] {
+    min-height: 170px;
+  }
+  .canvas > .widget[data-type='image'] {
+    min-height: 190px;
+  }
+
+  .inspector {
+    display: none !important;
+  }
+
+  .editor-canvas {
+    display: none !important;
+  }
+
+  .display-mode .mobile-tabs {
+    display: none !important;
+  }
+
+  .toolbar {
+    position: relative;
+    z-index: 20;
+  }
+
+  .profile-btn .tb-label {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .canvas {
+    padding: 10px 10px 72px;
+    gap: 10px;
+  }
+  .canvas > .widget[data-type='calendar'] {
+    min-height: 340px;
+  }
+  .toolbar {
+    padding: 8px 10px;
+  }
+  .brand {
+    gap: 6px;
+  }
+  .brand img {
+    width: 24px;
+    height: 24px;
+  }
+  .btn {
+    font-size: 0.82rem;
+  }
+  .display-exit {
+    top: 8px;
+    right: 8px;
+    padding: 6px 9px;
+    font-size: 0.75rem;
+  }
+  .toast-root {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    max-width: none;
+    align-items: stretch;
+  }
+  .modal {
+    border-radius: 16px;
+  }
+  .weekday-picker button {
+    font-size: 0.64rem;
+    padding: 6px 0;
+  }
+  .widget[data-type='calendar'] .cal-head .cal-title {
+    flex-basis: 100%;
+    min-width: 0;
+    font-size: 0.95rem;
+  }
+  .widget[data-type='calendar'] .cal-head {
+    gap: 5px;
+    margin-bottom: 6px;
+  }
+  .theme-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .image-library {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .event-list {
+    max-height: none;
+  }
+}

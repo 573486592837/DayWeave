@@ -1,0 +1,17 @@
+{
+  "name": "DayWeave",
+  "short_name": "DayWeave",
+  "description": "A private, customizable calendar for your LAN",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/assets/img/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
