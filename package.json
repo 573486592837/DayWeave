@@ -1,0 +1,20 @@
+{
+  "name": "dayweave",
+  "version": "1.1.0",
+  "private": true,
+  "description": "DayWeave - 可部署在个人笔记本、内网可访问的可自定义日程表",
+  "type": "module",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  }
+}
